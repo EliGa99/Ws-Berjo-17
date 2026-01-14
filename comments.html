@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Kommentare</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      background: #0f0f0f;
+      color: white;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .comment-box {
+      max-width: 600px;
+      margin: auto;
+      background: #1a1a1a;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: none;
+      background: #2a2a2a;
+      color: white;
+      font-size: 16px;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 12px 20px;
+      background: #1f6feb;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #388bfd;
+      transform: scale(1.05);
+    }
+
+    .comments-list {
+      max-width: 600px;
+      margin: 40px auto;
+    }
+
+    .comment {
+      background: #1a1a1a;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
+    .comment .name {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .comment .text {
+      color: #ccc;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>Kommentare</h1>
+
+<div class="comment-box">
+  <input type="text" id="name" placeholder="Dein Name">
+  <textarea id="text" rows="4" placeholder="Dein Kommentar"></textarea>
+  <button id="send">Kommentar senden</button>
+</div>
+
+<div class="comments-list" id="comments"></div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot } 
+    from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyC1BN0evLfENcTL734OKN3ll6h2MRkEtPA",
+    authDomain: "ws-berjo-17.firebaseapp.com",
+    projectId: "ws-berjo-17",
+    storageBucket: "ws-berjo-17.firebasestorage.app",
+    messagingSenderId: "266474233637",
+    appId: "1:266474233637:web:20160649ef88b54701c4cc"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const sendBtn = document.getElementById("send");
+  const nameInput = document.getElementById("name");
+  const textInput = document.getElementById("text");
+  const commentsDiv = document.getElementById("comments");
+
+  // Kommentar senden
+  sendBtn.addEventListener("click", async () => {
+    const name = nameInput.value.trim();
+    const text = textInput.value.trim();
+
+    if (!name || !text) {
+      alert("Bitte Name und Kommentar eingeben.");
+      return;
+    }
+
+    await addDoc(collection(db, "comments"), {
+      name: name,
+      text: text,
+      created: serverTimestamp()
+    });
+
+    nameInput.value = "";
+    textInput.value = "";
+  });
+
+  // Kommentare live anzeigen
+  const q = query(collection(db, "comments"), orderBy("created", "desc"));
+
+  onSnapshot(q, (snapshot) => {
+    commentsDiv.innerHTML = "";
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      commentsDiv.innerHTML += `
+        <div class="comment">
+          <div class="name">${data.name}</div>
+          <div class="text">${data.text}</div>
+        </div>
+      `;
+    });
+  });
+</script>
+
+</body>
+</html>
