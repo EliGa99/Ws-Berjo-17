@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Neueste YouTube Videos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f0f0f;
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .video {
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    iframe {
+      width: 100%;
+      max-width: 600px;
+      height: 340px;
+      border: none;
+      border-radius: 10px;
+    }
+    .title {
+      font-size: 18px;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Neueste Videos</h1>
+<div id="videos"></div>
+
+<script>
+  const channelId = "UCcWWbrQhFDDKO2C5SzNjmJQ";
+  const feedUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
+
+  fetch(`https://api.rss2json.com/v1/api.json?rss_url=${feedUrl}`)
+    .then(res => res.json())
+    .then(data => {
+      const container = document.getElementById("videos");
+
+      data.items.slice(0, 6).forEach(video => {
+        const videoId = video.link.split("v=")[1];
+
+        container.innerHTML += `
+          <div class="video">
+            <div class="title">${video.title}</div>
+            <iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>
+          </div>
+        `;
+      });
+    })
+    .catch(err => {
+      document.getElementById("videos").innerHTML =
+        "<p>Fehler beim Laden der Videos.</p>";
+    });
+</script>
+
+</body>
+</html>
