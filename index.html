@@ -41,13 +41,28 @@
   const channelId = "UCcWWbrQhFDDKO2C5SzNjmJQ";
   const feedUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
 
+  function extractVideoId(url) {
+    // Normale Videos: ?v=VIDEOID
+    if (url.includes("v=")) {
+      return url.split("v=")[1];
+    }
+
+    // Shorts: /shorts/VIDEOID
+    if (url.includes("/shorts/")) {
+      return url.split("/shorts/")[1];
+    }
+
+    // Fallback: letzte URL-Komponente
+    return url.split("/").pop();
+  }
+
   fetch(`https://api.rss2json.com/v1/api.json?rss_url=${feedUrl}`)
     .then(res => res.json())
     .then(data => {
       const container = document.getElementById("videos");
 
       data.items.slice(0, 6).forEach(video => {
-        const videoId = video.link.split("v=")[1];
+        const videoId = extractVideoId(video.link);
 
         container.innerHTML += `
           <div class="video">
@@ -62,6 +77,7 @@
         "<p>Fehler beim Laden der Videos.</p>";
     });
 </script>
+
 
 </body>
 </html>
