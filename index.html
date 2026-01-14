@@ -1,83 +1,116 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>Neueste YouTube Videos</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #0f0f0f;
-      color: #fff;
-      margin: 0;
-      padding: 20px;
-    }
-    h1 {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    .video {
-      margin-bottom: 40px;
-      text-align: center;
-    }
-    iframe {
-      width: 100%;
-      max-width: 600px;
-      height: 340px;
-      border: none;
-      border-radius: 10px;
-    }
-    .title {
-      font-size: 18px;
-      margin: 10px 0;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Ws Berjo 17</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+/* ===== Grunddesign ===== */
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(250deg, #0e9e67,#088bc7);
+    color: white;
+}
+
+/* ===== Header ===== */
+header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    background: #161b22;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+}
+
+.logo {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #0d30b2;
+}
+
+h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+/* ===== Hauptbereich ===== */
+main {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+main h2 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+main p {
+    color: #8b949e;
+    max-width: 600px;
+    margin: auto;
+    font-size: 18px;
+}
+
+/* ===== Buttons ===== */
+.buttons {
+    margin-top: 40px;
+}
+
+.button {
+    display: inline-block;
+    margin: 10px;
+    padding: 14px 24px;
+    background: #1f6feb;
+    color: white;
+    text-decoration: none;
+    border-radius: 14px;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.button:hover {
+    background: #388bfd;
+    transform: scale(1.05);
+}
+
+/* ===== Footer ===== */
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #dce1e7;
+    font-size: 14px;
+}
+</style>
 </head>
+
 <body>
 
-<h1>Neueste Videos</h1>
-<div id="videos"></div>
+<header>
+    <!-- Logo-Datei: logo.png -->
+    <img src="Ws Berjo 17 Profile Picture.jpg" alt="GoalNews Logo" class="logo">
+    <h1>Ws Berjo 17</h1>
+</header>
 
-<script>
-  const channelId = "UCcWWbrQhFDDKO2C5SzNjmJQ";
-  const feedUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
+<main>
+    <h2>Gameplays und Livestreams </h2>
+    <p>
+        Ws Berjo 17 liefert die neusten Gamring Einblicke.
+    </p>
 
-  function extractVideoId(url) {
-    // Normale Videos: ?v=VIDEOID
-    if (url.includes("v=")) {
-      return url.split("v=")[1];
-    }
+    <div class="buttons">
+        <a href="live.html" class="button">Neuste Videos</a>
+        <a href="https://www.youtube.com/@Ws_berjo">Folge uns Jetzt auf YouTube</a>
+    </div>
+</main>
 
-    // Shorts: /shorts/VIDEOID
-    if (url.includes("/shorts/")) {
-      return url.split("/shorts/")[1];
-    }
-
-    // Fallback: letzte URL-Komponente
-    return url.split("/").pop();
-  }
-
-  fetch(`https://api.rss2json.com/v1/api.json?rss_url=${feedUrl}`)
-    .then(res => res.json())
-    .then(data => {
-      const container = document.getElementById("videos");
-
-      data.items.slice(0, 6).forEach(video => {
-        const videoId = extractVideoId(video.link);
-
-        container.innerHTML += `
-          <div class="video">
-            <div class="title">${video.title}</div>
-            <iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>
-          </div>
-        `;
-      });
-    })
-    .catch(err => {
-      document.getElementById("videos").innerHTML =
-        "<p>Fehler beim Laden der Videos.</p>";
-    });
-</script>
-
+<footer>
+    © 2026 Ws Berjo 17 · Made By EliXTech
+</footer>
 
 </body>
 </html>
+
